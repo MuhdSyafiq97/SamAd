@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090
 
-# Pi-hole: A black hole for Internet advertisements
-# (c) 2017-2018 Pi-hole, LLC (https://pi-hole.net)
+# SamAd: A black hole for Internet advertisements
+# (c) 2017-2018 SamAd, LLC (https://pi-hole.net)
 # Network-wide ad blocking via your own hardware.
 #
-# Installs and Updates Pi-hole
+# Installs and Updates SamAd
 #
 # This file is copyright under the latest version of the EUPL.
 # Please see LICENSE file for your rights under this license.
@@ -50,7 +50,7 @@ EOM
 installLogLoc=/etc/pihole/install.log
 # This is an important file as it contains information specific to the machine it's being installed on
 setupVars=/etc/pihole/setupVars.conf
-# Pi-hole uses lighttpd as a Web server, and this is the config file for it
+# SamAd uses lighttpd as a Web server, and this is the config file for it
 # shellcheck disable=SC2034
 lighttpdConfig=/etc/lighttpd/lighttpd.conf
 # This is a file used for the colorized output
@@ -66,7 +66,7 @@ piholeGitUrl="https://github.com/MuhdSyafiq97/SamAd.git"
 PI_HOLE_LOCAL_REPO="/etc/.pihole"
 # These are the names of pi-holes files, stored in an array
 PI_HOLE_FILES=(chronometer list piholeDebug piholeLogFlush setupLCD update version gravity uninstall webpage)
-# This directory is where the Pi-hole scripts will be installed
+# This directory is where the SamAd scripts will be installed
 PI_HOLE_INSTALL_DIR="/opt/pihole"
 PI_HOLE_CONFIG_DIR="/etc/pihole"
 PI_HOLE_BIN_DIR="/usr/local/bin"
@@ -76,7 +76,7 @@ if [ -z "$useUpdateVars" ]; then
 fi
 
 adlistFile="/etc/pihole/adlists.list"
-# Pi-hole needs an IP address; to begin, these variables are empty since we don't know what the IP is until
+# SamAd needs an IP address; to begin, these variables are empty since we don't know what the IP is until
 # this script can run
 IPV4_ADDRESS=${IPV4_ADDRESS}
 IPV6_ADDRESS=${IPV6_ADDRESS}
@@ -144,7 +144,7 @@ else
 fi
 
 # A simple function that just echoes out our logo in ASCII format
-# This lets users know that it is a Pi-hole, LLC product
+# This lets users know that it is a SamAd, LLC product
 show_ascii_berry() {
   echo -e "
         ${COL_LIGHT_GREEN}.;;,.
@@ -180,7 +180,7 @@ is_command() {
 }
 
 os_check() {
-    if [ "$PIHOLE_SKIP_OS_CHECK" != true ]; then
+    if [ "$PIHOLE_SKIP_OS_CHECK" != false ]; then
         # This function gets a list of supported OS versions from a TXT record at versions.pi-hole.net
         # and determines whether or not the script is running on one of those systems
         local remote_os_domain valid_os valid_version valid_response detected_os detected_version display_warning cmdResult digReturnCode response
@@ -239,7 +239,7 @@ os_check() {
                 printf "  %b %bRetrieval of supported OS list failed. %s. %b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${errStr}" "${COL_NC}"
                 printf "      %bUnable to determine if the detected OS (%s %s) is supported%b\\n" "${COL_LIGHT_RED}" "${detected_os^}" "${detected_version}" "${COL_NC}"
                 printf "      Possible causes for this include:\\n"
-                printf "        - Firewall blocking certain DNS lookups from Pi-hole device\\n"
+                printf "        - Firewall blocking certain DNS lookups from SamAd device\\n"
                 printf "        - ns1.pi-hole.net being blocked (required to obtain TXT record from versions.pi-hole.net containing supported operating systems)\\n"
                 printf "        - Other internet connectivity issues\\n"
             else
@@ -352,7 +352,7 @@ if is_command apt-get ; then
     # Since our install script is so large, we need several other programs to successfully get a machine provisioned
     # These programs are stored in an array so they can be looped through later
     INSTALLER_DEPS=(dhcpcd5 git "${iproute_pkg}" whiptail dnsutils)
-    # Pi-hole itself has several dependencies that also need to be installed
+    # SamAd itself has several dependencies that also need to be installed
     PIHOLE_DEPS=(cron curl iputils-ping lsof netcat psmisc sudo unzip wget idn2 sqlite3 libcap2-bin dns-root-data libcap2)
     # The Web dashboard has some that also need to be installed
     # It's useful to separate the two since our repos are also setup as "Core" code and "Web" code
@@ -678,18 +678,18 @@ get_available_interfaces() {
 # A function for displaying the dialogs the user sees when first running the installer
 welcomeDialogs() {
     # Display the welcome dialog using an appropriately sized window via the calculation conducted earlier in the script
-    whiptail --msgbox --backtitle "Welcome" --title "Pi-hole automated installer" "\\n\\nThis installer will transform your device into a network-wide ad blocker!" "${r}" "${c}"
+    whiptail --msgbox --backtitle "Welcome" --title "SamAd automated installer" "\\n\\nThis installer will transform your device into a network-wide ad blocker!" "${r}" "${c}"
 
     # Request that users donate if they enjoy the software since we all work on it in our free time
-    whiptail --msgbox --backtitle "Plea" --title "Free and open source" "\\n\\nThe Pi-hole is free, but powered by your donations:  https://pi-hole.net/donate/" "${r}" "${c}"
+    whiptail --msgbox --backtitle "Plea" --title "Free and open source" "\\n\\nThe SamAd is free, but powered by your donations:  https://pi-hole.net/donate/" "${r}" "${c}"
 
     # Explain the need for a static address
-    whiptail --msgbox --backtitle "Initiating network interface" --title "Static IP Needed" "\\n\\nThe Pi-hole is a SERVER so it needs a STATIC IP ADDRESS to function properly.
+    whiptail --msgbox --backtitle "Initiating network interface" --title "Static IP Needed" "\\n\\nThe SamAd is a SERVER so it needs a STATIC IP ADDRESS to function properly.
 
 In the next section, you can choose to use your current network settings (DHCP) or to manually edit them." "${r}" "${c}"
 }
 
-# A function that let's the user pick an interface to use with Pi-hole
+# A function that let's the user pick an interface to use with SamAd
 chooseInterface() {
     # Turn the available interfaces into an array so it can be used with a whiptail dialog
     local interfacesArray=()
@@ -945,7 +945,7 @@ setIFCFG() {
         cp -p "${IFCFG_FILE}" "${IFCFG_FILE}".pihole.orig
         # Build Interface configuration file using the GLOBAL variables we have
         {
-        echo "# Configured via Pi-hole installer"
+        echo "# Configured via SamAd installer"
         echo "DEVICE=$PIHOLE_INTERFACE"
         echo "BOOTPROTO=none"
         echo "ONBOOT=yes"
@@ -1285,7 +1285,7 @@ chooseBlocklists() {
         mv "${adlistFile}" "${adlistFile}.old"
     fi
     # Let user select (or not) blocklists via a checklist
-    cmd=(whiptail --separate-output --checklist "Pi-hole relies on third party lists in order to block ads.\\n\\nYou can use the suggestions below, and/or add your own after installation\\n\\nTo deselect any list, use the arrow keys and spacebar" "${r}" "${c}" 5)
+    cmd=(whiptail --separate-output --checklist "SamAd relies on third party lists in order to block ads.\\n\\nYou can use the suggestions below, and/or add your own after installation\\n\\nTo deselect any list, use the arrow keys and spacebar" "${r}" "${c}" 5)
     # In an array, show the options available (all off by default):
     options=(StevenBlack "StevenBlack's Unified Hosts List" on
         MalwareDom "MalwareDomains" on)
@@ -1329,7 +1329,7 @@ version_check_dnsmasq() {
     local dnsmasq_conf="/etc/dnsmasq.conf"
     local dnsmasq_conf_orig="/etc/dnsmasq.conf.orig"
     local dnsmasq_pihole_id_string="addn-hosts=/etc/pihole/gravity.list"
-    local dnsmasq_pihole_id_string2="# Dnsmasq config for Pi-hole's FTLDNS"
+    local dnsmasq_pihole_id_string2="# Dnsmasq config for SamAd's FTLDNS"
     local dnsmasq_original_config="${PI_HOLE_LOCAL_REPO}/advanced/dnsmasq.conf.original"
     local dnsmasq_pihole_01_snippet="${PI_HOLE_LOCAL_REPO}/advanced/01-pihole.conf"
     local dnsmasq_pihole_01_location="/etc/dnsmasq.d/01-pihole.conf"
@@ -1337,10 +1337,10 @@ version_check_dnsmasq() {
     # If the dnsmasq config file exists
     if [[ -f "${dnsmasq_conf}" ]]; then
         printf "  %b Existing dnsmasq.conf found..." "${INFO}"
-        # If a specific string is found within this file, we presume it's from older versions on Pi-hole,
+        # If a specific string is found within this file, we presume it's from older versions on SamAd,
         if grep -q "${dnsmasq_pihole_id_string}" "${dnsmasq_conf}" ||
            grep -q "${dnsmasq_pihole_id_string2}" "${dnsmasq_conf}"; then
-            printf " it is from a previous Pi-hole install.\\n"
+            printf " it is from a previous SamAd install.\\n"
             printf "  %b Backing up dnsmasq.conf to dnsmasq.conf.orig..." "${INFO}"
             # so backup the original file
             mv -f "${dnsmasq_conf}" "${dnsmasq_conf_orig}"
@@ -1352,7 +1352,7 @@ version_check_dnsmasq() {
         # Otherwise,
         else
         # Don't to anything
-        printf " it is not a Pi-hole file, leaving alone!\\n"
+        printf " it is not a SamAd file, leaving alone!\\n"
         fi
     else
         # If a file cannot be found,
@@ -1367,7 +1367,7 @@ version_check_dnsmasq() {
     if [[ ! -d "/etc/dnsmasq.d"  ]];then
         install -d -m 755 "/etc/dnsmasq.d"
     fi
-    # Copy the new Pi-hole DNS config file into the dnsmasq.d directory
+    # Copy the new SamAd DNS config file into the dnsmasq.d directory
     install -D -m 644 -T "${dnsmasq_pihole_01_snippet}" "${dnsmasq_pihole_01_location}"
     printf "%b  %b Copying 01-pihole.conf to /etc/dnsmasq.d/01-pihole.conf\\n" "${OVER}"  "${TICK}"
     # Replace our placeholder values with the GLOBAL DNS variables that we populated earlier
@@ -1428,7 +1428,7 @@ installScripts() {
     local str="Installing scripts from ${PI_HOLE_LOCAL_REPO}"
     printf "  %b %s..." "${INFO}" "${str}"
 
-    # Clear out script files from Pi-hole scripts directory.
+    # Clear out script files from SamAd scripts directory.
     clean_existing "${PI_HOLE_INSTALL_DIR}" "${PI_HOLE_FILES[@]}"
 
     # Install files from local core repository
@@ -1441,7 +1441,7 @@ installScripts() {
         #
         # This first one is the directory
         install -o "${USER}" -Dm755 -d "${PI_HOLE_INSTALL_DIR}"
-        # The rest are the scripts Pi-hole needs
+        # The rest are the scripts SamAd needs
         install -o "${USER}" -Dm755 -t "${PI_HOLE_INSTALL_DIR}" gravity.sh
         install -o "${USER}" -Dm755 -t "${PI_HOLE_INSTALL_DIR}" ./advanced/Scripts/*.sh
         install -o "${USER}" -Dm755 -t "${PI_HOLE_INSTALL_DIR}" ./automated\ install/uninstall.sh
@@ -1462,7 +1462,7 @@ installScripts() {
 # Install the configs from PI_HOLE_LOCAL_REPO to their various locations
 installConfigs() {
     printf "\\n  %b Installing configs from %s...\\n" "${INFO}" "${PI_HOLE_LOCAL_REPO}"
-    # Make sure Pi-hole's config files are in place
+    # Make sure SamAd's config files are in place
     version_check_dnsmasq
 
     # Install list of DNS servers
@@ -1499,7 +1499,7 @@ installConfigs() {
             # back up the original
             mv /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf.orig
         fi
-        # and copy in the config file Pi-hole needs
+        # and copy in the config file SamAd needs
         install -D -m 644 -T ${PI_HOLE_LOCAL_REPO}/advanced/${LIGHTTPD_CFG} /etc/lighttpd/lighttpd.conf
         # Make sure the external.conf file exists, as lighttpd v1.4.50 crashes without it
         touch /etc/lighttpd/external.conf
@@ -1519,7 +1519,7 @@ installConfigs() {
 }
 
 install_manpage() {
-    # Copy Pi-hole man pages and call mandb to update man page database
+    # Copy SamAd man pages and call mandb to update man page database
     # Default location for man files for /usr/local/bin is /usr/local/share/man
     # on lightweight systems may not be present, so check before copying.
     printf "  %b Testing man page installation" "${INFO}"
@@ -1528,7 +1528,7 @@ install_manpage() {
         printf "%b  %b man not installed\\n" "${OVER}" "${INFO}"
         return
     elif [[ ! -d "/usr/local/share/man" ]]; then
-        # appropriate directory for Pi-hole's man page is not present
+        # appropriate directory for SamAd's man page is not present
         printf "%b  %b man pages not installed\\n" "${OVER}" "${INFO}"
         return
     fi
@@ -1838,7 +1838,7 @@ installCron() {
 }
 
 # Gravity is a very important script as it aggregates all of the domains into a single HOSTS formatted list,
-# which is what Pi-hole needs to begin blocking ads
+# which is what SamAd needs to begin blocking ads
 runGravity() {
     # Run gravity in the current shell
     { /opt/pihole/gravity.sh --force; }
@@ -2088,11 +2088,11 @@ checkSelinux() {
     fi
     # Exit the installer if any SELinux checks toggled the flag
     if [[ "${SELINUX_ENFORCING}" -eq 1 ]] && [[ -z "${PIHOLE_SELINUX}" ]]; then
-        printf "  Pi-hole does not provide an SELinux policy as the required changes modify the security of your system.\\n"
+        printf "  SamAd does not provide an SELinux policy as the required changes modify the security of your system.\\n"
         printf "  Please refer to https://wiki.centos.org/HowTos/SELinux if SELinux is required for your deployment.\\n"
         printf "      This check can be skipped by setting the environment variable %bPIHOLE_SELINUX%b to %btrue%b\\n" "${COL_LIGHT_RED}" "${COL_NC}" "${COL_LIGHT_RED}" "${COL_NC}"
         printf "      e.g: export PIHOLE_SELINUX=true\\n"
-        printf "      By setting this variable to true you acknowledge there may be issues with Pi-hole during or after the install\\n"
+        printf "      By setting this variable to true you acknowledge there may be issues with SamAd during or after the install\\n"
         printf "\\n  %bSELinux Enforcing detected, exiting installer%b\\n" "${COL_LIGHT_RED}" "${COL_NC}";
         exit 1;
     elif [[ "${SELINUX_ENFORCING}" -eq 1 ]] && [[ -n "${PIHOLE_SELINUX}" ]]; then
@@ -2122,7 +2122,7 @@ Your Admin Webpage login password is ${pwstring}"
    fi
 
     # Final completion message to user
-    whiptail --msgbox --backtitle "Make it so." --title "Installation Complete!" "Configure your devices to use the Pi-hole as their DNS server using:
+    whiptail --msgbox --backtitle "Make it so." --title "Installation Complete!" "Configure your devices to use the SamAd as their DNS server using:
 
 IPv4:	${IPV4_ADDRESS%/*}
 IPv6:	${IPV6_ADDRESS:-"Not Configured"}
@@ -2149,7 +2149,7 @@ update_dialogs() {
         strAdd="You will be updated to the latest version."
     fi
     opt2a="Reconfigure"
-    opt2b="This will reset your Pi-hole and allow you to enter new settings."
+    opt2b="This will reset your SamAd and allow you to enter new settings."
 
     # Display the information to the user
     UpdateCmd=$(whiptail --title "Existing Install Detected!" --menu "\\n\\nWe have detected an existing install.\\n\\nPlease choose from the following options: \\n($strAdd)" "${r}" "${c}" 2 \
@@ -2471,7 +2471,7 @@ get_binary_name() {
         if [[ ! "${machine}" == "i686" ]]; then
             printf "%b  %b %s...\\n" "${OVER}" "${CROSS}" "${str}"
             printf "  %b %bNot able to detect processor (unknown: %s), trying x86 (32bit) executable%b\\n" "${INFO}" "${COL_LIGHT_RED}" "${machine}" "${COL_NC}"
-            printf "  %b Contact Pi-hole Support if you experience issues (e.g: FTL not running)\\n" "${INFO}"
+            printf "  %b Contact SamAd Support if you experience issues (e.g: FTL not running)\\n" "${INFO}"
         else
             printf "%b  %b Detected 32bit (i686) processor\\n" "${OVER}" "${TICK}"
         fi
@@ -2611,7 +2611,7 @@ main() {
     if [[ "${EUID}" -eq 0 ]]; then
         # they are root and all is good
         printf "  %b %s\\n" "${TICK}" "${str}"
-        # Show the Pi-hole logo so people know it's genuine since the logo and name are trademarked
+        # Show the SamAd logo so people know it's genuine since the logo and name are trademarked
         show_ascii_berry
         make_temporary_log
     # Otherwise,
@@ -2619,7 +2619,7 @@ main() {
         # They do not have enough privileges, so let the user know
         printf "  %b %s\\n" "${INFO}" "${str}"
         printf "  %b %bScript called with non-root privileges%b\\n" "${INFO}" "${COL_LIGHT_RED}" "${COL_NC}"
-        printf "      The Pi-hole requires elevated privileges to install and run\\n"
+        printf "      The SamAd requires elevated privileges to install and run\\n"
         printf "      Please check the installer for any concerns regarding this requirement\\n"
         printf "      Make sure to download this script from a trusted source\\n\\n"
         printf "  %b Sudo utility check" "${INFO}"
@@ -2683,7 +2683,7 @@ main() {
     if [[ "${useUpdateVars}" == false ]]; then
         # Display welcome dialogs
         welcomeDialogs
-        # Create directory for Pi-hole storage
+        # Create directory for SamAd storage
         install -d -m 755 /etc/pihole/
         # Determine available interfaces
         get_available_interfaces
@@ -2743,7 +2743,7 @@ main() {
     # Create the pihole user
     create_pihole_user
 
-    # Check if FTL is installed - do this early on as FTL is a hard dependency for Pi-hole
+    # Check if FTL is installed - do this early on as FTL is a hard dependency for SamAd
     local funcOutput
     funcOutput=$(get_binary_name) #Store output of get_binary_name here
     local binary
@@ -2827,11 +2827,11 @@ main() {
         if [[ "${INSTALL_WEB_INTERFACE}" == true ]]; then
             printf "  %b View the web interface at http://pi.hole/admin or http://%s/admin\\n\\n" "${INFO}" "${IPV4_ADDRESS%/*}"
         fi
-        # Explain to the user how to use Pi-hole as their DNS server
-        printf "  %b You may now configure your devices to use the Pi-hole as their DNS server\\n" "${INFO}"
-        [[ -n "${IPV4_ADDRESS%/*}" ]] && printf "  %b Pi-hole DNS (IPv4): %s\\n" "${INFO}" "${IPV4_ADDRESS%/*}"
-        [[ -n "${IPV6_ADDRESS}" ]] && printf "  %b Pi-hole DNS (IPv6): %s\\n" "${INFO}" "${IPV6_ADDRESS}"
-        printf "  %b If you set a new IP address, please restart the server running the Pi-hole\\n" "${INFO}"
+        # Explain to the user how to use SamAd as their DNS server
+        printf "  %b You may now configure your devices to use the SamAd as their DNS server\\n" "${INFO}"
+        [[ -n "${IPV4_ADDRESS%/*}" ]] && printf "  %b SamAd DNS (IPv4): %s\\n" "${INFO}" "${IPV4_ADDRESS%/*}"
+        [[ -n "${IPV6_ADDRESS}" ]] && printf "  %b SamAd DNS (IPv6): %s\\n" "${INFO}" "${IPV6_ADDRESS}"
+        printf "  %b If you set a new IP address, please restart the server running the SamAd\\n" "${INFO}"
         INSTALL_TYPE="Installation"
     else
         INSTALL_TYPE="Update"
