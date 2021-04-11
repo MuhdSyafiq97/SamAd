@@ -49,12 +49,12 @@ if [[ "$2" == "remote" ]]; then
 
     GITHUB_VERSION_FILE="/etc/pihole/GitHubVersions"
 
-    GITHUB_CORE_VERSION="$(json_extract tag_name "$(curl -s 'https://api.github.com/repos/pi-hole/pi-hole/releases/latest' 2> /dev/null)")"
+    GITHUB_CORE_VERSION="$(json_extract tag_name "$(curl -s 'https://api.github.com/repos/MuhdSyafiq97/samad/releases/latest' 2> /dev/null)")"
     echo -n "${GITHUB_CORE_VERSION}" > "${GITHUB_VERSION_FILE}"
     chmod 644 "${GITHUB_VERSION_FILE}"
 
     if [[ "${INSTALL_WEB_INTERFACE}" == true ]]; then
-        GITHUB_WEB_VERSION="$(json_extract tag_name "$(curl -s 'https://api.github.com/repos/pi-hole/AdminLTE/releases/latest' 2> /dev/null)")"
+        GITHUB_WEB_VERSION="$(json_extract tag_name "$(curl -s 'https://api.github.com/repos/MuhdSyafiq97/AdminLTE/releases/latest' 2> /dev/null)")"
         echo -n " ${GITHUB_WEB_VERSION}" >> "${GITHUB_VERSION_FILE}"
     fi
 
