@@ -597,7 +597,7 @@ getGitFiles() {
     # as well as the repo URL
     local remoteRepo="${2}"
     # A local variable containing the message to be displayed
-    local str="Check for existing repository in ${1}"
+    local str="Check for existing repository bla bla bla in ${1}"
     # Show the message
     printf "  %b %s..." "${INFO}" "${str}"
     # Check if the directory is a repository
