@@ -580,7 +580,7 @@ update_repo() {
     if [[ "${curBranch}" == "master" ]]; then
          git reset --hard "$(git describe --abbrev=0 --tags)" || return $?
     fi
-    print($(git describe --abbrev=0 --tags))
+    echo "$(git describe --abbrev=0 --tags)"
     # Show a completion message
     printf "%b  %b %s\\n" "${OVER}" "${TICK}" "${str}"
     # Data in the repositories is public anyway so we can make it readable by everyone (+r to keep executable permission if already set by git)
