@@ -11,9 +11,9 @@
 # Please see LICENSE file for your rights under this license.
 
 # Variables
-readonly ADMIN_INTERFACE_GIT_URL="https://github.com/MuhdSyafiq97/AdminLTE.git"
+readonly ADMIN_INTERFACE_GIT_URL="https://github.com/MuhdSyafiq97/SamadGUI.git"
 readonly ADMIN_INTERFACE_DIR="/var/www/html/admin"
-readonly PI_HOLE_GIT_URL="https://github.com/MuhdSyafiq97/SamAd.git"
+readonly PI_HOLE_GIT_URL="https://github.com/MuhdSyafiq97/SamadScript.git"
 readonly PI_HOLE_FILES_DIR="/etc/.pihole"
 
 # shellcheck disable=SC2034
